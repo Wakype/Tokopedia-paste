@@ -162,7 +162,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  margin: EdgeInsets.fromLTRB(0, 30, 0, 24),
                   child: Column(
                     children: [
                       Container(
@@ -231,7 +231,7 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         width: lebar,
                         height: 310,
                         decoration: BoxDecoration(
@@ -278,15 +278,97 @@ class HomeView extends GetView<HomeController> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
                 Container(
                   child: Column(
                     children: [
-                      Container(),
-                      Container(),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(25, 0, 25, 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Text(
+                                'Pilihan Promo Hari Ini',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Text('Lihat Semua',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: bgHeader)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 25,
+                                ),
+                                PilihanPromoCard(
+                                    gambar: 'assets/images/ohBeauty.png'),
+                                PilihanPromoCard(
+                                    gambar: 'assets/images/toserbaPromo.png'),
+                                PilihanPromoCard(
+                                    gambar: 'assets/images/ohBeauty.png'),
+                                PilihanPromoCard(
+                                    gambar: 'assets/images/toserbaPromo.png'),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 25, 0, 25),
+                  width: lebar,
+                  height: 2,
+                  color: Color(0xffeeeeee),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(25, 0, 25, 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Text(
+                                'Produk Pilihan Untukmu',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: Text('Lihat Semua',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: bgHeader)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          children: [],
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -316,6 +398,18 @@ Widget CustomIcon({icon, text}) {
           ),
         )
       ],
+    ),
+  );
+}
+
+Widget PilihanPromoCard({gambar}) {
+  return Container(
+    margin: EdgeInsets.only(right: 12),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+    width: 150,
+    height: 262.5,
+    child: Image.asset(
+      gambar,
     ),
   );
 }
