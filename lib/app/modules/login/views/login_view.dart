@@ -87,26 +87,28 @@ class LoginView extends GetView<LoginController> {
                                 ),
                               ),
                             ),
-                            InkWell(
-                              onTap: () => Get.toNamed(Routes.HOME),
-                              child: Container(
-                                margin: EdgeInsets.only(top: 40),
-                                width: lebar,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    color: bgLogin2),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Login',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
+                            Container(
+                              margin: EdgeInsets.only(top: 40),
+                              child: InkWell(
+                                onTap: () => Get.toNamed(Routes.HOME),
+                                child: Container(
+                                  width: lebar,
+                                  height: 55,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: bgLogin2),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        'Login',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
