@@ -2,16 +2,17 @@
 
 // import 'dart:html';
 // import 'dart:html';
-import 'dart:ffi';
-import 'dart:ui';
+
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+
 
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
 
 import '../controllers/home_controller.dart';
@@ -264,7 +265,8 @@ class HomeView extends GetView<HomeController> {
                                       totalPersen: 100,
                                       currentPersen: 80,
                                       potongan: 'Rp 12.546',
-                                      status: 'Segera Habis'),
+                                      status: 'Segera Habis',
+                                      page: Routes.DETAIL_PRODUCT),
                                   KejarDiskonCard(
                                       gambar: 'assets/images/colokan.png',
                                       daerah: 'Jakarta Timur',
@@ -624,111 +626,115 @@ Widget KejarDiskonCard(
     daerah,
     status,
     totalPersen,
-    currentPersen}) {
+    currentPersen,
+    page}) {
   return Container(
     margin: EdgeInsets.only(right: 15),
     width: 146,
     height: 276,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8), color: Colors.white),
-    child: Column(
-      children: [
-        Container(
-          width: 146,
-          height: 146,
-          child: Image.asset(gambar),
-        ),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
-          child: Column(
-            children: [
-              Container(
-                // margin: EdgeInsets.only(bottom: 6),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  harga,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    child: InkWell(
+      onTap: () => Get.toNamed(page),
+      child: Column(
+        children: [
+          Container(
+            width: 146,
+            height: 146,
+            child: Image.asset(gambar),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
+            child: Column(
+              children: [
+                Container(
+                  // margin: EdgeInsets.only(bottom: 6),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    harga,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 6, top: 6),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 6),
-                      width: 36,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.circular(2),
-                          color: merahTrans),
-                      child: Center(
-                        child: Text(
-                          diskon,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: merah),
+                Container(
+                  margin: EdgeInsets.only(bottom: 6, top: 6),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 6),
+                        width: 36,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.circular(2),
+                            color: merahTrans),
+                        child: Center(
+                          child: Text(
+                            diskon,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: merah),
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      child: Text(
-                        potongan,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.lineThrough,
-                            color: abuText),
+                      Container(
+                        child: Text(
+                          potongan,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.lineThrough,
+                              color: abuText),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 2),
+                        child: Image.asset('assets/images/os.png'),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 16),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 2),
-                      child: Image.asset('assets/images/os.png'),
-                    ),
-                    Container(
-                      child: Text(
-                        daerah,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: abuText),
+                      Container(
+                        child: Text(
+                          daerah,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: abuText),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 6),
-                child: StepProgressIndicator(
-                  totalSteps: totalPersen,
-                  currentStep: currentPersen,
-                  size: 4,
-                  padding: 0,
-                  selectedColor: merah,
-                  unselectedColor: Color(0xffeeeeee),
-                  roundedEdges: Radius.circular(2),
+                Container(
+                  margin: EdgeInsets.only(bottom: 6),
+                  child: StepProgressIndicator(
+                    totalSteps: totalPersen,
+                    currentStep: currentPersen,
+                    size: 4,
+                    padding: 0,
+                    selectedColor: merah,
+                    unselectedColor: Color(0xffeeeeee),
+                    roundedEdges: Radius.circular(2),
+                  ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(status,
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                        color: abuText)),
-              ),
-            ],
-          ),
-        )
-      ],
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(status,
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: abuText)),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     ),
   );
 }

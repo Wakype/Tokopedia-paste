@@ -4,6 +4,8 @@ import '../modules/SplashScreen/bindings/splash_screen_binding.dart';
 import '../modules/SplashScreen/views/splash_screen_view.dart';
 import '../modules/checkEmail/bindings/check_email_binding.dart';
 import '../modules/checkEmail/views/check_email_view.dart';
+import '../modules/detail-product/bindings/detail_product_binding.dart';
+import '../modules/detail-product/views/detail_product_view.dart';
 import '../modules/forgotPassword/bindings/forgot_password_binding.dart';
 import '../modules/forgotPassword/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -50,6 +52,11 @@ class AppPages {
       name: _Paths.CHECK_EMAIL,
       page: () => const CheckEmailView(),
       binding: CheckEmailBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_PRODUCT,
+      page: () => const DetailProductView(),
+      binding: DetailProductBinding(),
     ),
   ];
 }
