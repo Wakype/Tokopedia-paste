@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:tokopedia/app/controllers/auth_controller_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
 
@@ -11,6 +12,7 @@ import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
   final controller = Get.put(RegisterController());
+  final authController = Get.put(AuthControllerController());
   @override
   Widget build(BuildContext context) {
     double tinggi = MediaQuery.of(context).size.height;
@@ -62,6 +64,7 @@ class RegisterView extends GetView<RegisterController> {
                                             color: abuAbu)))),
                           ),
                           CustomInput(
+                            controller: controller.email,
                               label: 'Email Address',
                               hint: 'Enter your email address',
                               keyboardType: TextInputType.emailAddress,
@@ -74,6 +77,7 @@ class RegisterView extends GetView<RegisterController> {
                             height: 20,
                           ),
                           CustomInput(
+                            controller: controller.password,
                             label: 'Password',
                             hint: 'Enter your password',
                             keyboardType: TextInputType.visiblePassword,
@@ -89,7 +93,7 @@ class RegisterView extends GetView<RegisterController> {
                           Container(
                             margin: EdgeInsets.only(top: 20),
                             child: InkWell(
-                              onTap: () => Get.toNamed(Routes.LOGIN),
+                              onTap: () => authController.registeer(controller.email.text, controller.password.text),
                               child: Container(
                                 width: lebar,
                                 height: 55,

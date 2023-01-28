@@ -3,15 +3,13 @@
 // import 'dart:html';
 // import 'dart:html';
 
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:tokopedia/app/controllers/auth_controller_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
 
@@ -19,6 +17,7 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   final controller = Get.put(HomeController());
+  final authController = Get.put(AuthControllerController());
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +83,13 @@ class HomeView extends GetView<HomeController> {
                               color: Colors.white,
                               size: 26,
                             ),
-                            Icon(
-                              CupertinoIcons.line_horizontal_3,
-                              color: Colors.white,
-                              size: 26,
+                            InkWell(
+                              onTap: () => authController.signOut(),
+                              child: Icon(
+                                CupertinoIcons.line_horizontal_3,
+                                color: Colors.white,
+                                size: 26,
+                              ),
                             ),
                           ],
                         ),

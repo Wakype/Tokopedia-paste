@@ -56,7 +56,7 @@ class LoginView extends GetView<LoginController> {
                               ),
                             ),
                             CustomInput(
-                              controller: controller.email,
+                                controller: controller.email,
                                 label: 'Email Address',
                                 hint: 'Masukkan email',
                                 obscure: false),
@@ -94,7 +94,9 @@ class LoginView extends GetView<LoginController> {
                             Container(
                               margin: EdgeInsets.only(top: 40),
                               child: InkWell(
-                                onTap: () => authController.login(controller.email.text, controller.password.text),
+                                onTap: () => authController.login(
+                                    controller.email.text,
+                                    controller.password.text),
                                 child: Container(
                                   width: lebar,
                                   height: 55,
@@ -218,7 +220,6 @@ Widget CustomInput({label, controller, obscure, hint, icon}) {
             controller: controller,
             obscureText: obscure,
             decoration: InputDecoration(
-              // labelText: customLabel,
               labelStyle: const TextStyle(
                 fontFamily: "Poppins",
                 color: Colors.black,
@@ -247,7 +248,6 @@ Widget CustomInput({label, controller, obscure, hint, icon}) {
                     color: Color.fromARGB(255, 27, 27, 27), width: 1),
                 gapPadding: 5,
               ),
-              // filled: true,
             )),
       ),
     ],
