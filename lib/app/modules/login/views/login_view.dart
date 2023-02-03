@@ -152,10 +152,16 @@ class LoginView extends GetView<LoginController> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SocialMediaButton(
+                                    ontap: () {
+                                        authController.signInWithFacebook();
+                                      },
                                       text: 'Facebook',
                                       image: 'assets/images/Facebook.png',
                                       context: context),
                                   SocialMediaButton(
+                                      ontap: () {
+                                        authController.signInWithGoogle();
+                                      },
                                       text: 'Google',
                                       image: 'assets/images/Google.png',
                                       context: context),
@@ -254,10 +260,11 @@ Widget CustomInput({label, controller, obscure, hint, icon}) {
   );
 }
 
-Widget SocialMediaButton({text, image, required BuildContext context}) {
+Widget SocialMediaButton({text, image, required BuildContext context, ontap}) {
   double tinggi = MediaQuery.of(context).size.height;
   double lebar = MediaQuery.of(context).size.width;
   return InkWell(
+    onTap: ontap,
     child: Container(
       width: lebar * 0.4,
       height: 55,

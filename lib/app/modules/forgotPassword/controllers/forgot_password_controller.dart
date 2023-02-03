@@ -1,7 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordController extends GetxController {
-  //TODO: Implement ForgotPasswordController
+ TextEditingController email = TextEditingController();
 
   final count = 0.obs;
   @override

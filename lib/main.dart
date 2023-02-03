@@ -32,7 +32,10 @@ class MyApp extends StatelessWidget {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: "Application",
-            initialRoute: snapshot.data != null ? Routes.HOME : Routes.SPLASH_SCREEN,
+            initialRoute:
+                snapshot.data != null && snapshot.data?.emailVerified == true
+                    ? Routes.HOME
+                    : Routes.SPLASH_SCREEN,
             getPages: AppPages.routes,
           );
         } else {

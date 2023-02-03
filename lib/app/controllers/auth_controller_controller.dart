@@ -1,9 +1,11 @@
-// ignore_for_file: unnecessary_overrides, unused_import, avoid_print, prefer_const_constructors
+// ignore_for_file: unnecessary_overrides, unused_import, avoid_print, prefer_const_constructors, unused_local_variable, unused_catch_clause
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 
 class AuthControllerController extends GetxController {
@@ -36,6 +38,7 @@ class AuthControllerController extends GetxController {
         email: email,
         password: password,
       );
+      credential.user?.sendEmailVerification();
 
       Get.toNamed(Routes.LOGIN);
     } on FirebaseAuthException catch (e) {
@@ -52,6 +55,19 @@ class AuthControllerController extends GetxController {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  resetPassword(String email) async {
+    try {
+      final credential = await auth.sendPasswordResetEmail(email: email);
+
+      Get.toNamed(Routes.CHECK_EMAIL);
+    } on FirebaseAuthException catch (e) {
+      Get.defaultDialog(
+        title: 'Alert',
+        middleText: 'gagal reset password',
+      );
     }
   }
 
@@ -97,4 +113,34 @@ class AuthControllerController extends GetxController {
       print(err);
     }
   }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    Get.offAllNamed(Routes.HOME);
+    // Once signed in, return the UserCredential
+    return await auth.signInWithCredential(credential);
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+  // Trigger the sign-in flow
+  final LoginResult loginResult = await FacebookAuth.instance.login();
+
+  // Create a credential from the access token
+  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+  // Once signed in, return the UserCredential
+  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+}
 }
