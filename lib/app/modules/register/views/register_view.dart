@@ -64,7 +64,7 @@ class RegisterView extends GetView<RegisterController> {
                                             color: abuAbu)))),
                           ),
                           CustomInput(
-                            controller: controller.email,
+                              controller: controller.email,
                               label: 'Email Address',
                               hint: 'Enter your email address',
                               keyboardType: TextInputType.emailAddress,
@@ -72,7 +72,7 @@ class RegisterView extends GetView<RegisterController> {
                           SizedBox(
                             height: 20,
                           ),
-                          PhoneInput(),
+                          // PhoneInput(),
                           SizedBox(
                             height: 20,
                           ),
@@ -93,7 +93,9 @@ class RegisterView extends GetView<RegisterController> {
                           Container(
                             margin: EdgeInsets.only(top: 20),
                             child: InkWell(
-                              onTap: () => authController.registeer(controller.email.text, controller.password.text),
+                              onTap: () => authController.registeer(
+                                  controller.email.text,
+                                  controller.password.text),
                               child: Container(
                                 width: lebar,
                                 height: 55,

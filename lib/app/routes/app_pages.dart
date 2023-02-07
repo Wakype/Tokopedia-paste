@@ -12,6 +12,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/otpVerification/bindings/otp_verification_binding.dart';
+import '../modules/otpVerification/views/otp_verification_view.dart';
+import '../modules/phoneNumberSignIn/bindings/phone_number_sign_in_binding.dart';
+import '../modules/phoneNumberSignIn/views/phone_number_sign_in_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 
@@ -45,7 +49,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FORGOT_PASSWORD,
-      page: () =>  ForgotPasswordView(),
+      page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
     GetPage(
@@ -57,6 +61,16 @@ class AppPages {
       name: _Paths.DETAIL_PRODUCT,
       page: () => const DetailProductView(),
       binding: DetailProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.PHONE_NUMBER_SIGN_IN,
+      page: () => PhoneNumberSignInView(),
+      binding: PhoneNumberSignInBinding(),
+    ),
+    GetPage(
+      name: _Paths.OTP_VERIFICATION,
+      page: () => const OtpVerificationView(),
+      binding: OtpVerificationBinding(),
     ),
   ];
 }

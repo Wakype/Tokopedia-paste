@@ -116,7 +116,37 @@ class SplashScreenView extends GetView<SplashScreenController> {
                           )),
                     ],
                   ),
-                )
+                ),
+                Container(
+                  // margin: EdgeInsets.only(top: 15),
+                  width: lebar,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Or Sign in with',
+                        style: TextStyle(
+                            height: 1.3,
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      InkWell(
+                          onTap: () => Get.toNamed(Routes.PHONE_NUMBER_SIGN_IN),
+                          child: Text(
+                            "Phone Number",
+                            style: TextStyle(
+                                height: 1.3,
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
+                          )),
+                    ],
+                  ),
+                ),
               ],
             )));
   }

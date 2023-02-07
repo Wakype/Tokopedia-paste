@@ -12,6 +12,8 @@ abstract class Routes {
   static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
   static const CHECK_EMAIL = _Paths.CHECK_EMAIL;
   static const DETAIL_PRODUCT = _Paths.DETAIL_PRODUCT;
+  static const PHONE_NUMBER_SIGN_IN = _Paths.PHONE_NUMBER_SIGN_IN;
+  static const OTP_VERIFICATION = _Paths.OTP_VERIFICATION;
 }
 
 abstract class _Paths {
@@ -23,4 +25,6 @@ abstract class _Paths {
   static const FORGOT_PASSWORD = '/forgot-password';
   static const CHECK_EMAIL = '/check-email';
   static const DETAIL_PRODUCT = '/detail-product';
+  static const PHONE_NUMBER_SIGN_IN = '/phone-number-sign-in';
+  static const OTP_VERIFICATION = '/otp-verification';
 }
