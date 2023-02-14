@@ -14,6 +14,10 @@ abstract class Routes {
   static const DETAIL_PRODUCT = _Paths.DETAIL_PRODUCT;
   static const PHONE_NUMBER_SIGN_IN = _Paths.PHONE_NUMBER_SIGN_IN;
   static const OTP_VERIFICATION = _Paths.OTP_VERIFICATION;
+  static const HOME_ADMIN = _Paths.HOME_ADMIN;
+  static const SLIDER_DATA = _Paths.SLIDER_DATA;
+  static const CREATE_SLIDER = _Paths.CREATE_SLIDER;
+  static const UPDATE_SLIDER = _Paths.UPDATE_SLIDER;
 }
 
 abstract class _Paths {
@@ -27,4 +31,8 @@ abstract class _Paths {
   static const DETAIL_PRODUCT = '/detail-product';
   static const PHONE_NUMBER_SIGN_IN = '/phone-number-sign-in';
   static const OTP_VERIFICATION = '/otp-verification';
+  static const HOME_ADMIN = '/home-admin';
+  static const SLIDER_DATA = '/slider-data';
+  static const CREATE_SLIDER = '/create-slider';
+  static const UPDATE_SLIDER = '/update-slider';
 }

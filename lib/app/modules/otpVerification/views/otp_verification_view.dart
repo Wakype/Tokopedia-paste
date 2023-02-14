@@ -4,34 +4,36 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:tokopedia/app/controllers/auth_controller_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
 
 import '../controllers/otp_verification_controller.dart';
 
 class OtpVerificationView extends GetView<OtpVerificationController> {
-  const OtpVerificationView({Key? key}) : super(key: key);
+  final controller = Get.put(OtpVerificationController());
+  final authController = Get.put(AuthControllerController());
   @override
   Widget build(BuildContext context) {
     double tinggi = MediaQuery.of(context).size.height;
     double lebar = MediaQuery.of(context).size.width;
 
     final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
+      width: 100,
+      height: 50,
       textStyle: TextStyle(
           fontSize: 20,
           color: Color.fromRGBO(30, 60, 87, 1),
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromARGB(255, 107, 165, 212)),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
-      borderRadius: BorderRadius.circular(8),
+      border: Border.all(color: bgHeader),
+      borderRadius: BorderRadius.circular(5),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
@@ -77,7 +79,7 @@ class OtpVerificationView extends GetView<OtpVerificationController> {
                         child: Padding(
                           padding: const EdgeInsets.all(30.0),
                           child: Pinput(
-                            onSubmitted: (pin) => {},
+                            onSubmitted: (pin) => authController.checkOTP(pin),
                             length: 6,
                             defaultPinTheme: defaultPinTheme,
                             focusedPinTheme: focusedPinTheme,
@@ -86,7 +88,7 @@ class OtpVerificationView extends GetView<OtpVerificationController> {
                                 PinputAutovalidateMode.onSubmit,
                             showCursor: true,
                             // ignore: avoid_print
-                            onCompleted: (pin) => {},
+                            onCompleted: (pin) => authController.checkOTP(pin),
                           ),
                         ),
                       ),
@@ -187,5 +189,3 @@ class OtpVerificationView extends GetView<OtpVerificationController> {
     );
   }
 }
-
-

@@ -65,7 +65,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
                         ),
                       ),
                       InkWell(
-                          onTap: () => Get.toNamed(Routes.REGISTER),
+                          onTap: () => Get.toNamed(Routes.OTP_VERIFICATION),
                           child: Container(
                             margin: EdgeInsets.only(top: 40),
                             width: lebar,

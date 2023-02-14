@@ -152,7 +152,7 @@ class LoginView extends GetView<LoginController> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SocialMediaButton(
-                                    ontap: () {
+                                      ontap: () {
                                         authController.signInWithFacebook();
                                       },
                                       text: 'Facebook',
@@ -200,7 +200,39 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ],
                       ),
-                    )
+                    ),
+                    Container(
+                      // margin: EdgeInsets.only(top: 90),
+                      width: lebar,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 3),
+                            child: Text(
+                              'or Sign in with',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: abuAbu),
+                            ),
+                          ),
+                          Container(
+                            child: InkWell(
+                              onTap: () =>
+                                  Get.toNamed(Routes.PHONE_NUMBER_SIGN_IN),
+                              child: Text(
+                                'Phone Number',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: bgLogin2),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

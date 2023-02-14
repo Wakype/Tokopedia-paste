@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:tokopedia/app/controllers/auth_controller_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
 
@@ -11,6 +12,7 @@ import '../controllers/phone_number_sign_in_controller.dart';
 
 class PhoneNumberSignInView extends GetView<PhoneNumberSignInController> {
   final controller = Get.put(PhoneNumberSignInController());
+  final authController = Get.put(AuthControllerController());
   @override
   Widget build(BuildContext context) {
     double tinggi = MediaQuery.of(context).size.height;
@@ -62,7 +64,7 @@ class PhoneNumberSignInView extends GetView<PhoneNumberSignInController> {
                       Container(
                         margin: EdgeInsets.only(top: 20),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () => authController.verifyPhone(controller.mobilePhone.text),
                           child: Container(
                             width: lebar,
                             height: 55,
@@ -73,7 +75,7 @@ class PhoneNumberSignInView extends GetView<PhoneNumberSignInController> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
-                                  'Sign Up',
+                                  'Send OTP',
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,

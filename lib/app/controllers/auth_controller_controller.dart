@@ -11,6 +11,7 @@ import 'package:tokopedia/app/routes/app_pages.dart';
 class AuthControllerController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   Stream<User?> streamAuthStatus() => auth.authStateChanges();
+  String verificationCode = "";
 
   login(String emailAddress, String password) async {
     try {
@@ -134,13 +135,60 @@ class AuthControllerController extends GetxController {
   }
 
   Future<UserCredential> signInWithFacebook() async {
-  // Trigger the sign-in flow
-  final LoginResult loginResult = await FacebookAuth.instance.login();
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
 
-  // Create a credential from the access token
-  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-  // Once signed in, return the UserCredential
-  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-}
+    // Once signed in, return the UserCredential
+    Get.offAllNamed(Routes.HOME);
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
+
+  verifyPhone(String nomor) async {
+    await auth.verifyPhoneNumber(
+        phoneNumber: '+62$nomor',
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await auth.signInWithCredential(credential).then((value) {
+            if (value.user != null) {
+              Get.toNamed(Routes.HOME);
+            }
+          });
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          Get.defaultDialog(
+            title: 'Alert',
+            middleText: 'gagal mengirim SMS',
+          );
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          verificationCode = verificationId;
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          verificationCode = verificationId;
+        },
+        timeout: Duration(seconds: 60));
+
+    Get.toNamed(Routes.OTP_VERIFICATION, parameters: {"phone": nomor});
+  }
+
+  checkOTP(String kodeSMS) async {
+    try {
+      await auth
+          .signInWithCredential(PhoneAuthProvider.credential(
+              verificationId: verificationCode, smsCode: kodeSMS))
+          .then((value) {
+        if (value.user != null) {
+          Get.toNamed(Routes.HOME);
+        }
+      });
+    } catch (err) {
+      Get.defaultDialog(
+        title: 'Alert',
+        middleText: 'Kode verifikasi salah',
+      );
+    }
+  }
 }
