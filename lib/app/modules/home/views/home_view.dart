@@ -3,6 +3,7 @@
 // import 'dart:html';
 // import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,6 +11,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:tokopedia/app/controllers/auth_controller_controller.dart';
+import 'package:tokopedia/app/controllers/slider_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
 
@@ -18,6 +20,7 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   final controller = Get.put(HomeController());
   final authController = Get.put(AuthControllerController());
+  final sliderC = Get.put(SliderController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +51,13 @@ class HomeView extends GetView<HomeController> {
                             fillColor: Colors.white,
                             contentPadding: EdgeInsets.symmetric(vertical: 2),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.transparent, width: 1),
+                              borderSide: BorderSide(color: Colors.transparent, width: 1),
                               borderRadius: BorderRadius.circular(6),
                               gapPadding: 5,
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
-                              borderSide: const BorderSide(
-                                  color: Colors.transparent, width: 1),
+                              borderSide: const BorderSide(color: Colors.transparent, width: 1),
                               gapPadding: 5,
                             ),
                           ),
@@ -97,36 +98,42 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                 ),
-                Container(
-                    margin: EdgeInsets.only(top: 16),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        height: 130,
-                        autoPlay: true,
-                        autoPlayCurve: Curves.easeInOutQuart,
-                      ),
-                      items: [
-                        'assets/images/kebut.png',
-                        'assets/images/keju.png',
-                        'assets/images/belanja.png'
-                      ].map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                                width: lebar,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                    color: Colors.amber,
-                                    borderRadius:
-                                        BorderRadiusDirectional.circular(8)),
-                                child: Image.asset(
-                                  i,
-                                  fit: BoxFit.fill,
-                                ));
-                          },
-                        );
-                      }).toList(),
-                    )),
+                FutureBuilder<QuerySnapshot<Object?>>(
+                  future: sliderC.getData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var listData = snapshot.data!.docs;
+
+                      return Container(
+                          margin: EdgeInsets.only(top: 16),
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              height: 130,
+                              autoPlay: true,
+                              autoPlayCurve: Curves.easeInOutQuart,
+                            ),
+                            items: listData.map((i) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Container(
+                                      width: lebar,
+                                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                      decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadiusDirectional.circular(8)),
+                                      child: Image.network(
+                                        (i.data() as Map<String, dynamic>)['gambarSlider'],
+                                        fit: BoxFit.fill,
+                                      ));
+                                  //       (listData[index].data()
+                                  // as Map<String, dynamic>)['gambarProduk']
+                                },
+                              );
+                            }).toList(),
+                          ));
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 30),
                   child: Wrap(
@@ -134,35 +141,16 @@ class HomeView extends GetView<HomeController> {
                     spacing: 13,
                     runSpacing: 20,
                     children: [
-                      CustomIcon(
-                          icon: "assets/images/menu/promo.png", text: 'promo'),
-                      CustomIcon(
-                          icon: "assets/images/menu/toserba.png",
-                          text: 'Toserba'),
-                      CustomIcon(
-                          icon: "assets/images/menu/elektronik.png",
-                          text: 'Elektronik'),
-                      CustomIcon(
-                          icon: "assets/images/menu/tagihan.png",
-                          text: 'Top-Up & tagihan'),
-                      CustomIcon(
-                          icon: "assets/images/menu/semua.png",
-                          text: 'Lihat semua'),
-                      CustomIcon(
-                          icon: "assets/images/menu/official.png",
-                          text: 'Official Store'),
-                      CustomIcon(
-                          icon: "assets/images/menu/play.png",
-                          text: 'Live shopping'),
-                      CustomIcon(
-                          icon: "assets/images/menu/seru.png",
-                          text: 'Tokopedia Seru'),
-                      CustomIcon(
-                          icon: "assets/images/menu/cod.png",
-                          text: 'Bayar di tempat'),
-                      CustomIcon(
-                          icon: "assets/images/menu/indo.png",
-                          text: 'Bangga lokal'),
+                      CustomIcon(icon: "assets/images/menu/promo.png", text: 'promo'),
+                      CustomIcon(icon: "assets/images/menu/toserba.png", text: 'Toserba'),
+                      CustomIcon(icon: "assets/images/menu/elektronik.png", text: 'Elektronik'),
+                      CustomIcon(icon: "assets/images/menu/tagihan.png", text: 'Top-Up & tagihan'),
+                      CustomIcon(icon: "assets/images/menu/semua.png", text: 'Lihat semua'),
+                      CustomIcon(icon: "assets/images/menu/official.png", text: 'Official Store'),
+                      CustomIcon(icon: "assets/images/menu/play.png", text: 'Live shopping'),
+                      CustomIcon(icon: "assets/images/menu/seru.png", text: 'Tokopedia Seru'),
+                      CustomIcon(icon: "assets/images/menu/cod.png", text: 'Bayar di tempat'),
+                      CustomIcon(icon: "assets/images/menu/indo.png", text: 'Bangga lokal'),
                     ],
                   ),
                 ),
@@ -192,44 +180,27 @@ class HomeView extends GetView<HomeController> {
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(right: 10),
-                                      child: Text('Berakhir dalam',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400,
-                                              color: abuText)),
+                                      child: Text('Berakhir dalam', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: abuText)),
                                     ),
                                     Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
                                       width: 112,
                                       height: 26,
-                                      decoration: BoxDecoration(
-                                          color: merah,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
+                                      decoration: BoxDecoration(color: merah, borderRadius: BorderRadius.circular(15)),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Icon(CupertinoIcons.time,
-                                              size: 16, color: Colors.white),
+                                          Icon(CupertinoIcons.time, size: 16, color: Colors.white),
                                           Text(
                                             '00 : 15 : 12',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.white),
+                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white),
                                           )
                                         ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                Text('Lihat Semua',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: bgHeader)),
+                                Text('Lihat Semua', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                               ],
                             )
                           ],
@@ -254,8 +225,7 @@ class HomeView extends GetView<HomeController> {
                             children: [
                               Container(
                                 margin: EdgeInsets.only(right: 32),
-                                child: Image.asset(
-                                    'assets/images/kejarDiskon.png'),
+                                child: Image.asset('assets/images/kejarDiskon.png'),
                               ),
                               Row(
                                 children: [
@@ -305,11 +275,7 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Container(
-                              child: Text('Lihat Semua',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: bgHeader)),
+                              child: Text('Lihat Semua', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                             ),
                           ],
                         ),
@@ -322,14 +288,10 @@ class HomeView extends GetView<HomeController> {
                                 SizedBox(
                                   width: 25,
                                 ),
-                                PilihanPromoCard(
-                                    gambar: 'assets/images/ohBeauty.png'),
-                                PilihanPromoCard(
-                                    gambar: 'assets/images/toserbaPromo.png'),
-                                PilihanPromoCard(
-                                    gambar: 'assets/images/ohBeauty.png'),
-                                PilihanPromoCard(
-                                    gambar: 'assets/images/toserbaPromo.png'),
+                                PilihanPromoCard(gambar: 'assets/images/ohBeauty.png'),
+                                PilihanPromoCard(gambar: 'assets/images/toserbaPromo.png'),
+                                PilihanPromoCard(gambar: 'assets/images/ohBeauty.png'),
+                                PilihanPromoCard(gambar: 'assets/images/toserbaPromo.png'),
                               ],
                             )),
                       ),
@@ -360,11 +322,7 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                             Container(
-                              child: Text('Lihat Semua',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: bgHeader)),
+                              child: Text('Lihat Semua', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                             ),
                           ],
                         ),
@@ -444,25 +402,11 @@ class HomeView extends GetView<HomeController> {
                               width: 25,
                               height: 3,
                               margin: EdgeInsets.only(bottom: 5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(2),
-                                  color: Colors.white),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: Colors.white),
                             )),
-                        CatalogContainer(
-                            text: 'Special Discount',
-                            gradient1: 0xff8A40FF,
-                            gradient2: 0xff462180,
-                            widget: Container()),
-                        CatalogContainer(
-                            text: 'Aktifitasmu',
-                            gradient1: 0xff3BD5FF,
-                            gradient2: 0xff0C87A9,
-                            widget: Container()),
-                        CatalogContainer(
-                            text: 'Gaming Setups',
-                            gradient1: 0xffFFBE53,
-                            gradient2: 0xffEE9B12,
-                            widget: Container()),
+                        CatalogContainer(text: 'Special Discount', gradient1: 0xff8A40FF, gradient2: 0xff462180, widget: Container()),
+                        CatalogContainer(text: 'Aktifitasmu', gradient1: 0xff3BD5FF, gradient2: 0xff0C87A9, widget: Container()),
+                        CatalogContainer(text: 'Gaming Setups', gradient1: 0xffFFBE53, gradient2: 0xffEE9B12, widget: Container()),
                       ],
                     ),
                   ),
@@ -532,15 +476,12 @@ class HomeView extends GetView<HomeController> {
                   margin: EdgeInsets.fromLTRB(25, 0, 25, 25),
                   width: lebar,
                   height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(width: 1, color: abuAbu)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), border: Border.all(width: 1, color: abuAbu)),
                   child: InkWell(
                     child: Center(
                       child: Text(
                         'Lihat Selebihnya',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -578,8 +519,7 @@ Widget CatalogContainer({text, gradient1, gradient2, widget}) {
           alignment: Alignment.centerLeft,
           child: Text(
             text,
-            style: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
           ),
         )
       ],
@@ -620,22 +560,12 @@ Widget PilihanPromoCard({gambar}) {
   );
 }
 
-Widget KejarDiskonCard(
-    {gambar,
-    harga,
-    diskon,
-    potongan,
-    daerah,
-    status,
-    totalPersen,
-    currentPersen,
-    page}) {
+Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPersen, currentPersen, page}) {
   return Container(
     margin: EdgeInsets.only(right: 15),
     width: 146,
     height: 276,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8), color: Colors.white),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
     child: InkWell(
       onTap: () => Get.toNamed(page),
       child: Column(
@@ -666,27 +596,18 @@ Widget KejarDiskonCard(
                         margin: EdgeInsets.only(right: 6),
                         width: 36,
                         height: 20,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(2),
-                            color: merahTrans),
+                        decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(2), color: merahTrans),
                         child: Center(
                           child: Text(
                             diskon,
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: merah),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: merah),
                           ),
                         ),
                       ),
                       Container(
                         child: Text(
                           potongan,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.lineThrough,
-                              color: abuText),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough, color: abuText),
                         ),
                       )
                     ],
@@ -703,10 +624,7 @@ Widget KejarDiskonCard(
                       Container(
                         child: Text(
                           daerah,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: abuText),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuText),
                         ),
                       ),
                     ],
@@ -726,11 +644,7 @@ Widget KejarDiskonCard(
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Text(status,
-                      style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          color: abuText)),
+                  child: Text(status, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: abuText)),
                 ),
               ],
             ),
@@ -793,9 +707,7 @@ Widget ProdukCard(
               Container(
                 margin: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.centerLeft,
-                child: Text(truncate(produk, length: 25),
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                child: Text(truncate(produk, length: 25), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ),
               Container(
                 alignment: Alignment.centerLeft,
@@ -812,27 +724,18 @@ Widget ProdukCard(
                       margin: EdgeInsets.only(right: 6),
                       width: 36,
                       height: 20,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.circular(2),
-                          color: merahTrans),
+                      decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(2), color: merahTrans),
                       child: Center(
                         child: Text(
                           diskon,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: merah),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: merah),
                         ),
                       ),
                     ),
                     Container(
                       child: Text(
                         potongan,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.lineThrough,
-                            color: abuText),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough, color: abuText),
                       ),
                     )
                   ],
@@ -849,10 +752,7 @@ Widget ProdukCard(
                     Container(
                       child: Text(
                         daerah,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: abuText),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuText),
                       ),
                     ),
                   ],
@@ -870,11 +770,7 @@ Widget ProdukCard(
                           size: 13,
                         )),
                     Container(
-                      child: Text('$rating | Terjual $terjual',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400,
-                              color: abuText)),
+                      child: Text('$rating | Terjual $terjual', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: abuText)),
                     ),
                   ],
                 ),
@@ -886,39 +782,3 @@ Widget ProdukCard(
     ),
   );
 }
-
-
-// Container(
-                              //     child: CarouselSlider(
-                              //   options: CarouselOptions(
-                              //     // height: 130,
-                              //     // autoPlay: true,
-                              //     autoPlayCurve: Curves.easeInOutQuart,
-                              //   ),
-                              //   items: [
-                              //     KejarDiskonCard(
-                              //         gambar: 'assets/images/masker.png',
-                              //         daerah: 'Kab. Bandung',
-                              //         diskon: '92%',
-                              //         harga: 'Rp 1.000',
-                              //         totalPersen: 100,
-                              //         currentPersen: 80,
-                              //         potongan: 'Rp 12.546',
-                              //         status: 'Segera Habis'),
-                              //     KejarDiskonCard(
-                              //         gambar: 'assets/images/colokan.png',
-                              //         daerah: 'Jakarta Timur',
-                              //         diskon: '6%',
-                              //         harga: 'Rp 103.000',
-                              //         totalPersen: 100,
-                              //         currentPersen: 35,
-                              //         potongan: 'Rp 109.900',
-                              //         status: 'Tersedia')
-                              //   ].map((i) {
-                              //     return Builder(
-                              //       builder: (BuildContext context) {
-                              //         return i;
-                              //       },
-                              //     );
-                              //   }).toList(),
-                              // )),

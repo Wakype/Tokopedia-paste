@@ -4,6 +4,8 @@ import '../modules/SplashScreen/bindings/splash_screen_binding.dart';
 import '../modules/SplashScreen/views/splash_screen_view.dart';
 import '../modules/checkEmail/bindings/check_email_binding.dart';
 import '../modules/checkEmail/views/check_email_view.dart';
+import '../modules/createProduk/bindings/create_produk_binding.dart';
+import '../modules/createProduk/views/create_produk_view.dart';
 import '../modules/createSlider/bindings/create_slider_binding.dart';
 import '../modules/createSlider/views/create_slider_view.dart';
 import '../modules/detail-product/bindings/detail_product_binding.dart';
@@ -20,12 +22,16 @@ import '../modules/otpVerification/bindings/otp_verification_binding.dart';
 import '../modules/otpVerification/views/otp_verification_view.dart';
 import '../modules/phoneNumberSignIn/bindings/phone_number_sign_in_binding.dart';
 import '../modules/phoneNumberSignIn/views/phone_number_sign_in_view.dart';
+import '../modules/produkData/bindings/produk_data_binding.dart';
+import '../modules/produkData/views/produk_data_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/sliderData/bindings/slider_data_binding.dart';
 import '../modules/sliderData/views/slider_data_view.dart';
 import '../modules/updateSlider/bindings/update_slider_binding.dart';
 import '../modules/updateSlider/views/update_slider_view.dart';
+
+// ignore_for_file: constant_identifier_names
 
 part 'app_routes.dart';
 
@@ -99,6 +105,16 @@ class AppPages {
       name: _Paths.UPDATE_SLIDER,
       page: () => UpdateSliderView(),
       binding: UpdateSliderBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUK_DATA,
+      page: () => ProdukDataView(),
+      binding: ProdukDataBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREATE_PRODUK,
+      page: () => CreateProdukView(),
+      binding: CreateProdukBinding(),
     ),
   ];
 }

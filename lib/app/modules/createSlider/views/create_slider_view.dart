@@ -47,6 +47,33 @@ class CreateSliderView extends GetView<CreateSliderController> {
                       padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                       child: Column(
                         children: [
+                          Container(),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                            margin: EdgeInsets.only(bottom: 40),
+                            child: InkWell(
+                              onTap: () => controller.uplaodGambar(),
+                              child: Container(
+                                width: 200,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: bgHeader),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Upload Gambar',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                           CustomInput(
                               controller: controller.gambarSlider,
                               label: 'Link gambar Slider',

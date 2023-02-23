@@ -28,20 +28,12 @@ class HomeAdminView extends GetView<HomeAdminController> {
                   width: lebar,
                   height: 60,
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [bgLogin, bgHeader]),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(5),
-                          bottomRight: Radius.circular(5))),
+                      gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [bgLogin, bgHeader]),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5))),
                   child: Center(
                     child: Text(
                       "✨ Home Admin ✨",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                     ),
                   )),
               Container(
@@ -58,12 +50,15 @@ class HomeAdminView extends GetView<HomeAdminController> {
                           Container(
                             child: Image.asset("assets/images/menu/semua.png"),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 7),
-                            // width: widht,
-                            child: Text(
-                              "Semua",
-                              textAlign: TextAlign.center,
+                          InkWell(
+                            onTap: () => Get.toNamed(Routes.PRODUK_DATA),
+                            child: Container(
+                              margin: EdgeInsets.only(top: 7),
+                              // width: widht,
+                              child: Text(
+                                "Produk data",
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           )
                         ],
@@ -80,8 +75,7 @@ class HomeAdminView extends GetView<HomeAdminController> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              child:
-                                  Image.asset("assets/images/menu/tagihan.png"),
+                              child: Image.asset("assets/images/menu/tagihan.png"),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 7),

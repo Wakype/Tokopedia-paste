@@ -1,11 +1,17 @@
-// ignore_for_file: unnecessary_overrides, unused_import, avoid_print, prefer_const_constructors, unused_local_variable, unused_catch_clause, non_constant_identifier_names
+// ignore_for_file: unused_import, non_constant_identifier_names, unnecessary_string_interpolations, unnecessary_brace_in_string_interps
 
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SliderController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
+  String url = "";
+  File? path;
 
   addData(bool aktifSlider, String deskSlider, String gambarSlider) async {
     CollectionReference slider = firestore.collection('slider');
@@ -19,7 +25,6 @@ class SliderController extends GetxController {
 // Add a new document with a generated ID
     try {
       await slider.add(sliderData).then((DocumentReference doc) {
-        print('DocumentSnapshot added with ID: ${doc.id}');
         Get.defaultDialog(title: 'Alert', middleText: 'berhasil menambah data');
         Get.offNamed(Routes.SLIDER_DATA);
       });
@@ -50,7 +55,6 @@ class SliderController extends GetxController {
       Get.offNamed(Routes.SLIDER_DATA);
     } catch (e) {
       Get.defaultDialog(title: 'Alert', middleText: 'gagal menupdate data');
-      print(e);
     }
   }
 
@@ -62,7 +66,29 @@ class SliderController extends GetxController {
       return Get.offAllNamed(Routes.SLIDER_DATA);
     } catch (e) {
       Get.defaultDialog(title: 'Alert', middleText: 'gagal mendelete data');
-      print(e);
+    }
+  }
+
+  addPhoto() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      String namaFile = result.files.first.name;
+      url = namaFile;
+      path = file;
+
+      try {
+        await storage.ref("${namaFile}").putFile(file);
+        final data = await storage.ref("${namaFile}").getDownloadURL();
+
+        url = data;
+
+        return url;
+      } catch (e) {
+        Get.defaultDialog(title: 'Alert', middleText: 'gagal menUpload file');
+      }
+    } else {
     }
   }
 }

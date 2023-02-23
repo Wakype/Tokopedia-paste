@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:tokopedia/app/controllers/produk_controller.dart';
 import 'package:tokopedia/app/controllers/slider_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
 import 'package:tokopedia/config/warna.dart';
@@ -14,6 +15,7 @@ import '../controllers/slider_data_controller.dart';
 class SliderDataView extends GetView<SliderDataController> {
   final sliderC = Get.put(SliderController());
   final controller = Get.put(SliderDataController());
+  final produkC = Get.put(ProdukController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,8 @@ class SliderDataView extends GetView<SliderDataController> {
             child: Scaffold(
       body: Container(
         child: FutureBuilder<QuerySnapshot<Object?>>(
-            future: sliderC.getData(),
+            // future: sliderC.getData(),
+            future: produkC.getProdukData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 var listData = snapshot.data!.docs;
@@ -33,22 +36,16 @@ class SliderDataView extends GetView<SliderDataController> {
                           onLongPress: () =>
                               sliderC.deleteData(listData[index].id),
                           title: Text((listData[index].data()
-                              as Map<String, dynamic>)['deskSlider']),
+                              as Map<String, dynamic>)['namaProduk']),
                           subtitle: Text(
                             (listData[index].data()
-                                    as Map<String, dynamic>)['aktifSlider']
-                                .toString(),
+                                as Map<String, dynamic>)['namaToko'],
                             style: TextStyle(
-                                fontSize: 16,
-                                color: (listData[index].data()
-                                        as Map<String, dynamic>)['aktifSlider']
-                                    ? bgHeader
-                                    : merah,
-                                fontWeight: FontWeight.w500),
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                           leading: Container(
                             child: Image.network((listData[index].data()
-                                as Map<String, dynamic>)['gambarSlider']),
+                                as Map<String, dynamic>)['gambarProduk']),
                           ),
                           trailing: IconButton(
                             onPressed: () {
