@@ -17,40 +17,51 @@ class ProdukDataView extends GetView<ProdukDataController> {
   final produkC = Get.put(ProdukController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: Scaffold(
-      body: Container(
-        child: FutureBuilder<QuerySnapshot<Object?>>(
-            // future: sliderC.getData(),
-            future: produkC.getProdukData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                var listData = snapshot.data!.docs;
-                print("========================");
-                print(listData);
-                print("========================");
-                return Wrap(
-                  spacing: 10,
-                  // children: List.generate(listData.length, (index) => Text((listData[index].data() as Map<String, dynamic>)['namaProduk'])),
-                  children: List.generate(listData.length, (index) => ProdukCard(data: listData[index].data() as Map<String, dynamic>)),
-                );
-              } else {
-                return (Center(
-                  child: CircularProgressIndicator(),
-                ));
-              }
-            }),
+    return SafeArea(
+        child: Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+          width: double.infinity,
+          child: FutureBuilder<QuerySnapshot<Object?>>(
+              // future: sliderC.getData(),
+              future: produkC.getProdukData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  var listData = snapshot.data!.docs;
+                  print("========================");
+                  print(listData);
+                  print("========================");
+                  return Wrap(
+                    spacing: 0,
+                    alignment: WrapAlignment.spaceBetween,
+                    runSpacing: 10,
+                    // children: List.generate(listData.length, (index) => Text((listData[index].data() as Map<String, dynamic>)['namaProduk'])),
+                    children: List.generate(listData.length, (index) => ProdukCard(data: listData[index].data() as Map<String, dynamic>)),
+                  );
+                } else {
+                  return (Center(
+                    child: CircularProgressIndicator(),
+                  ));
+                }
+              }),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed(Routes.CREATE_PRODUK),
         child: Icon(CupertinoIcons.add),
       ),
-    )));
+    ));
   }
 }
 
-Widget ProdukCard({data, double lebar = 185, double tinggi = 355, double lebarGambar = 185, double tinggiGambar = 185, double marginKanan = 15}) {
+Widget ProdukCard({
+  data,
+  double lebar = 175,
+  double tinggi = 345,
+  double lebarGambar = 175,
+  double tinggiGambar = 175,
+}) {
   String truncate(String text, {length = 7, omission = '...'}) {
     if (length >= text.length) {
       return text;
@@ -68,7 +79,7 @@ Widget ProdukCard({data, double lebar = 185, double tinggi = 355, double lebarGa
   }
 
   return Container(
-    margin: EdgeInsets.only(right: marginKanan),
+    // margin: EdgeInsets.only(right: marginKanan),
     // padding: EdgeInsets.symmetric(vertical: 10),
     width: lebar,
     // height: tinggi,
@@ -95,7 +106,7 @@ Widget ProdukCard({data, double lebar = 185, double tinggi = 355, double lebarGa
               Container(
                 margin: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.centerLeft,
-                child: Text(truncate(data['namaProduk'], length: 40), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                child: Text(truncate(data['namaProduk'], length: 30), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ),
               Container(
                 alignment: Alignment.centerLeft,
