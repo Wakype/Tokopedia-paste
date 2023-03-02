@@ -11,8 +11,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:tokopedia/app/controllers/auth_controller_controller.dart';
+import 'package:tokopedia/app/controllers/produk_controller.dart';
 import 'package:tokopedia/app/controllers/slider_controller.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
+import 'package:tokopedia/config/currencyConvert.dart';
 import 'package:tokopedia/config/warna.dart';
 
 import '../controllers/home_controller.dart';
@@ -21,6 +23,7 @@ class HomeView extends GetView<HomeController> {
   final controller = Get.put(HomeController());
   final authController = Get.put(AuthControllerController());
   final sliderC = Get.put(SliderController());
+  final produkC = Get.put(ProdukController());
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +212,7 @@ class HomeView extends GetView<HomeController> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         width: lebar,
-                        height: 310,
+                        height: 350,
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
                           begin: Alignment.topRight,
@@ -224,32 +227,36 @@ class HomeView extends GetView<HomeController> {
                           child: Row(
                             children: [
                               Container(
+                                height: 350,
                                 margin: EdgeInsets.only(right: 32),
                                 child: Image.asset('assets/images/kejarDiskon.png'),
                               ),
-                              Row(
-                                children: [
-                                  KejarDiskonCard(
-                                      gambar: 'assets/images/masker.png',
-                                      daerah: 'Kab. Bandung',
-                                      diskon: '92%',
-                                      harga: 'Rp 1.000',
-                                      totalPersen: 100,
-                                      currentPersen: 80,
-                                      potongan: 'Rp 12.546',
-                                      status: 'Segera Habis',
-                                      page: Routes.DETAIL_PRODUCT),
-                                  KejarDiskonCard(
-                                      gambar: 'assets/images/colokan.png',
-                                      daerah: 'Jakarta Timur',
-                                      diskon: '6%',
-                                      harga: 'Rp 103.000',
-                                      totalPersen: 100,
-                                      currentPersen: 35,
-                                      potongan: 'Rp 109.900',
-                                      status: 'Tersedia')
-                                ],
-                              )
+
+                              FutureBuilder<QuerySnapshot<Object?>>(
+                                  // future: sliderC.getData(),
+                                  future: produkC.getProdukData(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      var listData = snapshot.data!.docs;
+                                      print("========================");
+                                      print(listData);
+                                      print("========================");
+                                      return Wrap(
+                                        spacing: 0,
+                                        alignment: WrapAlignment.spaceBetween,
+                                        runSpacing: 10,
+                                        // children: List.generate(listData.length, (index) => Text((listData[index].data() as Map<String, dynamic>)['namaProduk'])),
+                                        children: List.generate(
+                                            listData.length,
+                                            (index) =>
+                                                KejarDiskonCard(data: listData[index].data() as Map<String, dynamic>, page: Routes.DETAIL_PRODUCT, arguments: listData[index])),
+                                      );
+                                    } else {
+                                      return (Center(
+                                        child: CircularProgressIndicator(),
+                                      ));
+                                    }
+                                  }),
                             ],
                           ),
                         ),
@@ -328,54 +335,42 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       Container(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Container(
-                            height: 340,
-                            child: Row(
-                              children: [
-                                SizedBox(width: 25),
-                                ProdukCard(
-                                    produk: 'Logitech G603 Lightspeed High DPI',
-                                    daerah: 'Kab. Bandung',
-                                    diskon: '44%',
-                                    gambar: 'assets/images/mouse.png',
-                                    harga: 'Rp 609.000',
-                                    potongan: 'Rp 1.000.000',
-                                    rating: '4.8',
-                                    terjual: '312'),
-                                ProdukCard(
-                                    produk: 'Logitech G203 Mouse Gaming',
-                                    daerah: 'Kab. Bandung',
-                                    diskon: '46%',
-                                    gambar: 'assets/images/mouseBanyak.png',
-                                    harga: 'Rp 204.000',
-                                    potongan: 'Rp 379.000',
-                                    rating: '4.9',
-                                    terjual: '6rb'),
-                                ProdukCard(
-                                    produk: 'Logitech G603 Lightspeed High DPI',
-                                    daerah: 'Kab. Bandung',
-                                    diskon: '44%',
-                                    gambar: 'assets/images/mouse.png',
-                                    harga: 'Rp 609.000',
-                                    potongan: 'Rp 1.000.000',
-                                    rating: '4.8',
-                                    terjual: '312'),
-                                ProdukCard(
-                                    produk: 'Logitech G203 Mouse Gaming',
-                                    daerah: 'Kab. Bandung',
-                                    diskon: '46%',
-                                    gambar: 'assets/images/mouseBanyak.png',
-                                    harga: 'Rp 204.000',
-                                    potongan: 'Rp 379.000',
-                                    rating: '4.9',
-                                    terjual: '6rb'),
-                              ],
-                            ),
+                          child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          height: 355,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 24,
+                              ),
+                              FutureBuilder<QuerySnapshot<Object?>>(
+                                  // future: sliderC.getData(),
+                                  future: produkC.getProdukData(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      var listData = snapshot.data!.docs;
+                                      print("========================");
+                                      print(listData);
+                                      print("========================");
+                                      return Wrap(
+                                        spacing: 0,
+                                        alignment: WrapAlignment.spaceBetween,
+                                        runSpacing: 10,
+                                        // children: List.generate(listData.length, (index) => Text((listData[index].data() as Map<String, dynamic>)['namaProduk'])),
+                                        children: List.generate(
+                                            listData.length, (index) => ProdukCard(data: listData[index].data() as Map<String, dynamic>)),
+                                      );
+                                    } else {
+                                      return (Center(
+                                        child: CircularProgressIndicator(),
+                                      ));
+                                    }
+                                  }),
+                            ],
                           ),
                         ),
-                      )
+                      ))
                     ],
                   ),
                 ),
@@ -412,65 +407,29 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-                  child: Wrap(spacing: 15, runSpacing: 20, children: [
-                    ProdukCard(
-                        gambar: 'assets/images/steelseries.png',
-                        daerah: 'Jakarta Pusat',
-                        diskon: '12%',
-                        harga: 'Rp 699.000',
-                        potongan: 'Rp 790.000',
-                        produk: 'SteelSeries Rival 3 Wireless - Gaming ...',
-                        rating: '5.0',
-                        tinggi: 340,
-                        lebar: 165,
-                        tinggiGambar: 165,
-                        lebarGambar: 165,
-                        marginKanan: 0,
-                        terjual: '124'),
-                    ProdukCard(
-                        gambar: 'assets/images/monitor.png',
-                        daerah: 'Kota Depok',
-                        diskon: '44%',
-                        harga: 'Rp 5.949.900',
-                        potongan: 'Rp 1.000.000',
-                        produk: 'Monitor Lenovo G34W-30 34" ...',
-                        rating: '5.0',
-                        tinggi: 340,
-                        lebar: 165,
-                        tinggiGambar: 165,
-                        lebarGambar: 165,
-                        marginKanan: 0,
-                        terjual: '23'),
-                    ProdukCard(
-                        gambar: 'assets/images/colokan.png',
-                        daerah: 'Kab. Tangerang',
-                        diskon: '44%',
-                        harga: 'Rp 3.750',
-                        potongan: 'Rp 1.000.000',
-                        produk: 'Myvo Steker T Multi Lampu Colokan ...',
-                        rating: '5.0',
-                        tinggi: 340,
-                        lebar: 165,
-                        tinggiGambar: 165,
-                        lebarGambar: 165,
-                        marginKanan: 0,
-                        terjual: '76'),
-                    ProdukCard(
-                        gambar: 'assets/images/logitech.png',
-                        daerah: 'Kab. Bandung',
-                        diskon: '44%',
-                        harga: 'Rp 609.000',
-                        potongan: 'Rp 1.000.000',
-                        produk: 'Logitech G PRO X SUPERLIGHT ...',
-                        rating: '5.0',
-                        tinggi: 340,
-                        lebar: 165,
-                        tinggiGambar: 165,
-                        lebarGambar: 165,
-                        marginKanan: 0,
-                        terjual: '1rb'),
-                  ]),
+                  padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                  width: double.infinity,
+                  child: FutureBuilder<QuerySnapshot<Object?>>(
+                      future: produkC.getProdukData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          var listData = snapshot.data!.docs;
+                          print("========================");
+                          print(listData);
+                          print("========================");
+                          return Wrap(
+                            spacing: 0,
+                            alignment: WrapAlignment.spaceBetween,
+                            runSpacing: 20,
+                            // children: List.generate(listData.length, (index) => Text((listData[index].data() as Map<String, dynamic>)['namaProduk'])),
+                            children: List.generate(listData.length, (index) => ProdukCard(data: listData[index].data() as Map<String, dynamic>)),
+                          );
+                        } else {
+                          return (Center(
+                            child: CircularProgressIndicator(),
+                          ));
+                        }
+                      }),
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(25, 0, 25, 25),
@@ -560,20 +519,36 @@ Widget PilihanPromoCard({gambar}) {
   );
 }
 
-Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPersen, currentPersen, page}) {
+Widget KejarDiskonCard({data, page, arguments}) {
+  String truncate(String text, {length = 7, omission = '...'}) {
+    if (length >= text.length) {
+      return text;
+    }
+    return text.replaceRange(length, text.length, omission);
+  }
+
+  int diskon = data['diskonProduk'];
+  int harga = data['hargaProduk'];
+
+  double convertDiskon() {
+    double disk = diskon * (harga / 100);
+    double hargaFix = harga - disk;
+    return hargaFix;
+  }
+
   return Container(
     margin: EdgeInsets.only(right: 15),
     width: 146,
-    height: 276,
+    height: 325,
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
     child: InkWell(
-      onTap: () => Get.toNamed(page),
+      onTap: () => Get.toNamed(page, arguments: arguments),
       child: Column(
         children: [
           Container(
             width: 146,
             height: 146,
-            child: Image.asset(gambar),
+            child: Image.network(data['gambarProduk']),
           ),
           Container(
             width: double.infinity,
@@ -581,10 +556,14 @@ Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPe
             child: Column(
               children: [
                 Container(
-                  // margin: EdgeInsets.only(bottom: 6),
+                  margin: EdgeInsets.only(bottom: 10),
+                  alignment: Alignment.centerLeft,
+                  child: Text(truncate(data['namaProduk'], length: 22), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                ),
+                Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    harga,
+                    CurrencyFormat.convertToIdr(convertDiskon(), 0),
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -599,14 +578,14 @@ Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPe
                         decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(2), color: merahTrans),
                         child: Center(
                           child: Text(
-                            diskon,
+                            '${data['diskonProduk'].toString()}%',
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: merah),
                           ),
                         ),
                       ),
                       Container(
                         child: Text(
-                          potongan,
+                          CurrencyFormat.convertToIdr(data['hargaProduk'], 0),
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough, color: abuText),
                         ),
                       )
@@ -619,11 +598,11 @@ Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPe
                     children: [
                       Container(
                         margin: EdgeInsets.only(right: 2),
-                        child: Image.asset('assets/images/os.png'),
+                        child: data['isOfficial'] ? Image.asset('assets/images/os.png') : Image.asset('assets/images/merchant.png'),
                       ),
                       Container(
                         child: Text(
-                          daerah,
+                          data['daerahProduk'],
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuText),
                         ),
                       ),
@@ -633,8 +612,8 @@ Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPe
                 Container(
                   margin: EdgeInsets.only(bottom: 6),
                   child: StepProgressIndicator(
-                    totalSteps: totalPersen,
-                    currentStep: currentPersen,
+                    totalSteps: 100,
+                    currentStep: 80,
                     size: 4,
                     padding: 0,
                     selectedColor: merah,
@@ -644,7 +623,7 @@ Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPe
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Text(status, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: abuText)),
+                  child: Text('Segera Habis', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: abuText)),
                 ),
               ],
             ),
@@ -655,20 +634,7 @@ Widget KejarDiskonCard({gambar, harga, diskon, potongan, daerah, status, totalPe
   );
 }
 
-Widget ProdukCard(
-    {gambar,
-    harga,
-    diskon,
-    potongan,
-    daerah,
-    terjual,
-    rating,
-    produk,
-    double lebar = 146,
-    double tinggi = 316,
-    double lebarGambar = 146,
-    double tinggiGambar = 146,
-    double marginKanan = 15}) {
+Widget ProdukCard({data, double lebar = 146, double tinggi = 316, double lebarGambar = 146, double tinggiGambar = 146, double marginKanan = 15}) {
   String truncate(String text, {length = 7, omission = '...'}) {
     if (length >= text.length) {
       return text;
@@ -676,9 +642,15 @@ Widget ProdukCard(
     return text.replaceRange(length, text.length, omission);
   }
 
-// void main() {
-//   print(truncate('Hello, World!', length: 4));
-// }
+  int diskon = data['diskonProduk'];
+  int harga = data['hargaProduk'];
+
+  double convertDiskon() {
+    double disk = diskon * (harga / 100);
+    double hargaFix = harga - disk;
+    return hargaFix;
+  }
+
   return Container(
     margin: EdgeInsets.only(right: marginKanan),
     // padding: EdgeInsets.symmetric(vertical: 10),
@@ -697,7 +669,7 @@ Widget ProdukCard(
         Container(
           width: lebarGambar,
           height: tinggiGambar,
-          child: Image.asset(gambar),
+          child: Image.network(data['gambarProduk']),
         ),
         Container(
           width: double.infinity,
@@ -707,12 +679,12 @@ Widget ProdukCard(
               Container(
                 margin: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.centerLeft,
-                child: Text(truncate(produk, length: 25), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                child: Text(truncate(data['namaProduk'], length: 22), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  harga,
+                  CurrencyFormat.convertToIdr(convertDiskon(), 0),
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -727,14 +699,14 @@ Widget ProdukCard(
                       decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(2), color: merahTrans),
                       child: Center(
                         child: Text(
-                          diskon,
+                          '${data['diskonProduk'].toString()}%',
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: merah),
                         ),
                       ),
                     ),
                     Container(
                       child: Text(
-                        potongan,
+                        CurrencyFormat.convertToIdr(data['hargaProduk'], 0),
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough, color: abuText),
                       ),
                     )
@@ -747,11 +719,11 @@ Widget ProdukCard(
                   children: [
                     Container(
                       margin: EdgeInsets.only(right: 2),
-                      child: Image.asset('assets/images/merchant.png'),
+                      child: data['isOfficial'] ? Image.asset('assets/images/os.png') : Image.asset('assets/images/merchant.png'),
                     ),
                     Container(
                       child: Text(
-                        daerah,
+                        data['daerahProduk'],
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuText),
                       ),
                     ),
@@ -770,7 +742,8 @@ Widget ProdukCard(
                           size: 13,
                         )),
                     Container(
-                      child: Text('$rating | Terjual $terjual', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: abuText)),
+                      child: Text('${data['ratingProduk'].toString()} | Terjual ${data['terjualProduk'].toString()}',
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: abuText)),
                     ),
                   ],
                 ),

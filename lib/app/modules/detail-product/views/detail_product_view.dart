@@ -9,12 +9,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:tokopedia/app/routes/app_pages.dart';
+import 'package:tokopedia/config/currencyConvert.dart';
 import 'package:tokopedia/config/warna.dart';
 
 import '../controllers/detail_product_controller.dart';
 
 class DetailProductView extends GetView<DetailProductController> {
-  const DetailProductView({Key? key}) : super(key: key);
+  final data = Get.arguments;
+
   @override
   Widget build(BuildContext context) {
     double tinggi = MediaQuery.of(context).size.height;
@@ -63,18 +65,15 @@ class DetailProductView extends GetView<DetailProductController> {
                                   filled: true,
                                   prefixIcon: Icon(CupertinoIcons.search),
                                   fillColor: Colors.white,
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 2),
+                                  contentPadding: EdgeInsets.symmetric(vertical: 2),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: abuAbu, width: 1),
+                                    borderSide: BorderSide(color: abuAbu, width: 1),
                                     borderRadius: BorderRadius.circular(6),
                                     gapPadding: 5,
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(6),
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent, width: 1),
+                                    borderSide: const BorderSide(color: Colors.transparent, width: 1),
                                     gapPadding: 5,
                                   ),
                                 ),
@@ -116,8 +115,11 @@ class DetailProductView extends GetView<DetailProductController> {
                       Container(
                         margin: EdgeInsets.only(bottom: 16),
                         width: 430,
-                        // height: 430,
-                        child: Image.asset('assets/images/detail/parfum.png'),
+                        height: 430,
+                        child: Image.network(
+                          data['gambarProduk'],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       Container(
                         child: Column(
@@ -126,15 +128,12 @@ class DetailProductView extends GetView<DetailProductController> {
                               padding: EdgeInsets.fromLTRB(24, 0, 24, 17),
                               margin: EdgeInsets.only(bottom: 24),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     child: Text(
-                                      'Rp370.000',
-                                      style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w600),
+                                      CurrencyFormat.convertToIdr(data['hargaProduk'], 0),
+                                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   Container(
@@ -145,11 +144,7 @@ class DetailProductView extends GetView<DetailProductController> {
                             ),
                             Container(
                               padding: EdgeInsets.fromLTRB(24, 0, 24, 17),
-                              child: Text(
-                                  'Mine. Perfumery ETHEREAL - 50ml Eau De Parfum',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400)),
+                              child: Text(data['namaProduk'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
                             ),
                             Container(
                               child: SingleChildScrollView(
@@ -161,13 +156,10 @@ class DetailProductView extends GetView<DetailProductController> {
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(right: 16),
-                                      child: Text('Terjual 250+',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400)),
+                                      child: Text(data['terjualProduk'].toString(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
                                     ),
                                     CardSampingTerjual(
-                                        text: '4.9 (320)',
+                                        text: '${data['ratingProduk'].toString()} (${data['totalProdukRating'].toString()})',
                                         widget: Container(
                                           margin: EdgeInsets.only(right: 7),
                                           child: Icon(
@@ -176,12 +168,8 @@ class DetailProductView extends GetView<DetailProductController> {
                                             size: 15,
                                           ),
                                         )),
-                                    CardSampingTerjual(
-                                        text: 'Foto pembeli (50)',
-                                        widget: Container()),
-                                    CardSampingTerjual(
-                                        text: 'Diskusi (25)',
-                                        widget: Container()),
+                                    CardSampingTerjual(text: 'Foto pembeli (50)', widget: Container()),
+                                    CardSampingTerjual(text: 'Diskusi (25)', widget: Container()),
                                     SizedBox(
                                       width: 18,
                                     ),
@@ -212,21 +200,18 @@ class DetailProductView extends GetView<DetailProductController> {
                             Container(
                               margin: EdgeInsets.only(bottom: 24),
                               alignment: Alignment.centerLeft,
-                              child: Text('Detail Produk',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600)),
+                              child: Text('Detail Produk', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                             ),
                             DetailDiveder(
                                 context: context,
                                 text1: 'Berat Satuan',
-                                text2: '200 g',
+                                text2: '${data['beratProduk'].toString()} g',
                                 textWeight: FontWeight.w400,
                                 textcolor: Colors.black),
                             DetailDiveder(
                                 context: context,
                                 text1: 'Etalase',
-                                text2: 'Mine Private Collection',
+                                text2: '${data['etalaseProduk']}',
                                 textWeight: FontWeight.w600,
                                 textcolor: bgLogin2),
                           ],
@@ -239,17 +224,11 @@ class DetailProductView extends GetView<DetailProductController> {
                             Container(
                               margin: EdgeInsets.only(bottom: 24),
                               alignment: Alignment.centerLeft,
-                              child: Text('Deskripsi Produk',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600)),
+                              child: Text('Deskripsi Produk', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                             ),
                             Container(
                               margin: EdgeInsets.only(bottom: 12),
-                              child: Text(
-                                  truncate(
-                                      'Mine. ETHEREAL Eau De Parfum 50mi glass perfume bottle in hard box packaging • ETHEREAL • With facets that highlight a side ...',
-                                      length: 127),
+                              child: Text(truncate(data['deskProduk'], length: 127),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
@@ -257,11 +236,7 @@ class DetailProductView extends GetView<DetailProductController> {
                             ),
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: Text('Baca Selengkapnya',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: bgLogin2)),
+                              child: Text('Baca Selengkapnya', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgLogin2)),
                             ),
                           ],
                         ),
@@ -282,31 +257,23 @@ class DetailProductView extends GetView<DetailProductController> {
                               child: Row(
                                 children: [
                                   Container(
-                                      margin: EdgeInsets.only(right: 16),
-                                      width: 75,
-                                      child: Image.asset(
-                                          'assets/images/detail/fotoPenjual.png')),
+                                      margin: EdgeInsets.only(right: 16), width: 75, child: Image.asset('assets/images/detail/fotoPenjual.png')),
                                   Container(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(bottom: 12),
                                           child: Row(
                                             children: [
                                               Container(
-                                                child: Image.asset(
-                                                    'assets/images/detail/os.png'),
+                                                child: Image.asset('assets/images/detail/os.png'),
                                               ),
                                               Container(
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
-                                                  'Mine. Parfumery',
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                  data['namaToko'],
+                                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                                                 ),
                                               )
                                             ],
@@ -315,18 +282,13 @@ class DetailProductView extends GetView<DetailProductController> {
                                         Container(
                                           margin: EdgeInsets.only(bottom: 6),
                                           alignment: Alignment.centerLeft,
-                                          child: Text('Online 23 Jam lalu',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400)),
+                                          child: Text('Online 23 Jam lalu', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
                                         ),
                                         Container(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            'Kota Tangerang',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400),
+                                            data['daerahProduk'],
+                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                                           ),
                                         ),
                                       ],
@@ -338,20 +300,13 @@ class DetailProductView extends GetView<DetailProductController> {
                             Container(
                               child: InkWell(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 17),
+                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
                                   width: 83,
                                   height: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          width: 1, color: bgLogin2)),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 1, color: bgLogin2)),
                                   child: Text(
                                     'Follow',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: bgLogin2),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: bgLogin2),
                                   ),
                                 ),
                               ),
@@ -386,11 +341,7 @@ class DetailProductView extends GetView<DetailProductController> {
                               ),
                             ),
                             Container(
-                              child: Text('Lihat Semua',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: bgHeader)),
+                              child: Text('Lihat Semua', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                             ),
                           ],
                         ),
@@ -411,34 +362,28 @@ class DetailProductView extends GetView<DetailProductController> {
                                       produk: 'Mine. Perfumery FLORAISON ...',
                                       rating: '4.8',
                                       terjual: '312',
-                                      gambar:
-                                          'assets/images/detail/parfum1.png'),
+                                      gambar: 'assets/images/detail/parfum1.png'),
                                   ProdukCard(
                                       daerah: 'Kota Tangerang',
                                       harga: 'Rp 450.000',
-                                      produk:
-                                          'Mine. Perfumery TATMI - 50ml ...',
+                                      produk: 'Mine. Perfumery TATMI - 50ml ...',
                                       rating: '4.9',
                                       terjual: '150',
-                                      gambar:
-                                          'assets/images/detail/parfum2.png'),
+                                      gambar: 'assets/images/detail/parfum2.png'),
                                   ProdukCard(
                                       daerah: 'Kota Tangerang',
                                       harga: 'Rp 370.000',
                                       produk: 'Mine. Perfumery FLORAISON ...',
                                       rating: '4.8',
                                       terjual: '312',
-                                      gambar:
-                                          'assets/images/detail/parfum1.png'),
+                                      gambar: 'assets/images/detail/parfum1.png'),
                                   ProdukCard(
                                       daerah: 'Kota Tangerang',
                                       harga: 'Rp 450.000',
-                                      produk:
-                                          'Mine. Perfumery TATMI - 50ml ...',
+                                      produk: 'Mine. Perfumery TATMI - 50ml ...',
                                       rating: '4.9',
                                       terjual: '150',
-                                      gambar:
-                                          'assets/images/detail/parfum2.png'),
+                                      gambar: 'assets/images/detail/parfum2.png'),
                                 ],
                               )),
                         ),
@@ -470,11 +415,7 @@ class DetailProductView extends GetView<DetailProductController> {
                               ),
                             ),
                             Container(
-                              child: Text('Lihat Semua',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: bgHeader)),
+                              child: Text('Lihat Semua', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                             ),
                           ],
                         ),
@@ -497,18 +438,13 @@ class DetailProductView extends GetView<DetailProductController> {
                                     margin: EdgeInsets.only(right: 6, left: 8),
                                     child: Text(
                                       '4.9',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   Container(
                                     child: Text(
                                       '320 rating ∙ 102 ulasan',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          color: abuAbu),
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuAbu),
                                     ),
                                   ),
                                 ],
@@ -516,56 +452,42 @@ class DetailProductView extends GetView<DetailProductController> {
                             ),
                             Container(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     width: 65,
                                     height: 65,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8)),
-                                    child: Image.asset(
-                                        'assets/images/detail/ulasan1.png'),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                    child: Image.asset('assets/images/detail/ulasan1.png'),
                                   ),
                                   Container(
                                     width: 65,
                                     height: 65,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8)),
-                                    child: Image.asset(
-                                        'assets/images/detail/ulasan2.png'),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                    child: Image.asset('assets/images/detail/ulasan2.png'),
                                   ),
                                   Container(
                                     width: 65,
                                     height: 65,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8)),
-                                    child: Image.asset(
-                                        'assets/images/detail/ulasan3.png'),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                    child: Image.asset('assets/images/detail/ulasan3.png'),
                                   ),
                                   Container(
                                     width: 65,
                                     height: 65,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8)),
-                                    child: Image.asset(
-                                        'assets/images/detail/ulasan4.png'),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                    child: Image.asset('assets/images/detail/ulasan4.png'),
                                   ),
                                   Container(
                                     width: 65,
                                     height: 65,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/detail/ulasan5.png'))),
+                                        image: DecorationImage(image: AssetImage('assets/images/detail/ulasan5.png'))),
                                     child: Center(
                                       child: Text(
                                         '+61',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -588,31 +510,22 @@ class DetailProductView extends GetView<DetailProductController> {
                                           margin: EdgeInsets.only(right: 13),
                                           width: 50,
                                           height: 50,
-                                          child: Image.asset(
-                                              'assets/images/detail/ulasanPembeli.png'),
+                                          child: Image.asset('assets/images/detail/ulasanPembeli.png'),
                                         ),
                                         Container(
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                child:
-                                                    Text('Zain Ekstrom Bothman',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        )),
+                                                child: Text('Zain Ekstrom Bothman',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    )),
                                               ),
                                               Container(
-                                                child: Text(
-                                                    '31 ulasan lengkap ∙ 17 terbantu',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: abuAbu)),
+                                                child: Text('31 ulasan lengkap ∙ 17 terbantu',
+                                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuAbu)),
                                               )
                                             ],
                                           ),
@@ -628,8 +541,7 @@ class DetailProductView extends GetView<DetailProductController> {
                                           margin: EdgeInsets.only(right: 7),
                                           width: 95,
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Icon(
                                                 CupertinoIcons.star_fill,
@@ -660,11 +572,7 @@ class DetailProductView extends GetView<DetailProductController> {
                                           ),
                                         ),
                                         Container(
-                                            child: Text('10 bulan lalu',
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: abuAbu))),
+                                            child: Text('10 bulan lalu', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuAbu))),
                                       ],
                                     ),
                                   ),
@@ -682,11 +590,8 @@ class DetailProductView extends GetView<DetailProductController> {
                                         ),
                                         Container(
                                           alignment: Alignment.centerLeft,
-                                          child: Text('Baca Selengkapnya',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: bgHeader)),
+                                          child:
+                                              Text('Baca Selengkapnya', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                                         ),
                                       ],
                                     ),
@@ -724,11 +629,7 @@ class DetailProductView extends GetView<DetailProductController> {
                               ),
                             ),
                             Container(
-                              child: Text('Lihat Semua',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: bgHeader)),
+                              child: Text('Lihat Semua', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                             ),
                           ],
                         ),
@@ -740,35 +641,25 @@ class DetailProductView extends GetView<DetailProductController> {
                             DiskusiUser(
                                 marginBawah: 12,
                                 marginKiri: 0,
-                                bgProfile:
-                                    'assets/images/detail/diskusiUser1.png',
-                                comment:
-                                    'hai! kira-kira kapan restock lagi? thanks in advance',
+                                bgProfile: 'assets/images/detail/diskusiUser1.png',
+                                comment: 'hai! kira-kira kapan restock lagi? thanks in advance',
                                 widgetNama: RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(
                                     text: 'Rayna Stanton ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
                                     children: [
                                       TextSpan(
                                         text: '∙ Apr 2022',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: abuAbu),
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuAbu),
                                       ),
                                     ],
                                   ),
                                 )),
                             DiskusiUser(
                                 marginBawah: 0,
-                                bgProfile:
-                                    'assets/images/detail/diskusiUser2.png',
-                                comment:
-                                    'Halo kak, maaf banget yak karena kamu jadi nunggu, saat ini kita masih out of stock ya ...',
+                                bgProfile: 'assets/images/detail/diskusiUser2.png',
+                                comment: 'Halo kak, maaf banget yak karena kamu jadi nunggu, saat ini kita masih out of stock ya ...',
                                 marginKiri: 32,
                                 widgetNama: Row(
                                   children: [
@@ -776,16 +667,9 @@ class DetailProductView extends GetView<DetailProductController> {
                                       margin: EdgeInsets.only(right: 6),
                                       width: 70,
                                       height: 25,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                          color: hijauTrans),
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: hijauTrans),
                                       child: Center(
-                                        child: Text('Penjual',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                color: bgHeader)),
+                                        child: Text('Penjual', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: bgHeader)),
                                       ),
                                     ),
                                     Container(
@@ -822,17 +706,11 @@ class DetailProductView extends GetView<DetailProductController> {
                           textAlign: TextAlign.center,
                           text: TextSpan(
                             text: 'Produk bermasalah? ',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black),
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
                             children: [
                               TextSpan(
                                 text: 'Laporkan',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: bgHeader),
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: bgHeader),
                               ),
                             ],
                           ),
@@ -843,18 +721,14 @@ class DetailProductView extends GetView<DetailProductController> {
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(24, 16, 24, 16),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top: BorderSide(width: 1, color: Color(0xffeeeeee)))),
+                  decoration: BoxDecoration(border: Border(top: BorderSide(width: 1, color: Color(0xffeeeeee)))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: 50,
                         height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(width: 1.5, color: abuAbu)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 1.5, color: abuAbu)),
                         child: Center(
                           child: Icon(
                             CupertinoIcons.chat_bubble_text,
@@ -865,32 +739,22 @@ class DetailProductView extends GetView<DetailProductController> {
                       Container(
                         width: lebar * 0.35,
                         height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(width: 1.5, color: bgHeader)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 1.5, color: bgHeader)),
                         child: Center(
                             child: Text(
                           'Beli Langsung',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: bgHeader),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: bgHeader),
                         )),
                       ),
                       Container(
                         width: lebar * 0.35,
                         height: 50,
-                        decoration: BoxDecoration(
-                            color: bgHeader,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(width: 1.5, color: bgHeader)),
+                        decoration:
+                            BoxDecoration(color: bgHeader, borderRadius: BorderRadius.circular(8), border: Border.all(width: 1.5, color: bgHeader)),
                         child: Center(
                             child: Text(
                           '+Keranjang',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                         )),
                       ),
                     ],
@@ -905,12 +769,7 @@ class DetailProductView extends GetView<DetailProductController> {
   }
 }
 
-Widget DiskusiUser(
-    {widgetNama,
-    bgProfile,
-    comment,
-    required double marginKiri,
-    required double marginBawah}) {
+Widget DiskusiUser({widgetNama, bgProfile, comment, required double marginKiri, required double marginBawah}) {
   return Container(
     margin: EdgeInsets.only(left: marginKiri, bottom: marginBawah),
     child: Column(
@@ -950,23 +809,19 @@ Widget CardSampingTerjual({widget, text}) {
   return Container(
     margin: EdgeInsets.only(right: 6),
     padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(width: 1, color: abuAbu)),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(width: 1, color: abuAbu)),
     child: Row(
       children: [
         widget,
         Container(
-          child: Text(text,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
+          child: Text(text, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
         )
       ],
     ),
   );
 }
 
-Widget DetailDiveder(
-    {text1, text2, textcolor, textWeight, required BuildContext context}) {
+Widget DetailDiveder({text1, text2, textcolor, textWeight, required BuildContext context}) {
   double tinggi = MediaQuery.of(context).size.height;
   double lebar = MediaQuery.of(context).size.width;
   return Container(
@@ -975,24 +830,15 @@ Widget DetailDiveder(
       children: [
         Container(
           padding: EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(width: 1, color: abuAbu))),
+          decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: abuAbu))),
           child: Row(
             children: [
               Container(
                 width: lebar * 0.45,
-                child: Text(text1,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: abuAbu)),
+                child: Text(text1, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: abuAbu)),
               ),
               Container(
-                child: Text(text2,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: textWeight,
-                        color: textcolor)),
+                child: Text(text2, style: TextStyle(fontSize: 16, fontWeight: textWeight, color: textcolor)),
               )
             ],
           ),
@@ -1053,9 +899,7 @@ Widget ProdukCard(
               Container(
                 margin: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.centerLeft,
-                child: Text(truncate(produk, length: 25),
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                child: Text(truncate(produk, length: 25), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ),
               Container(
                 alignment: Alignment.centerLeft,
@@ -1071,16 +915,11 @@ Widget ProdukCard(
                   margin: EdgeInsets.only(right: 6),
                   width: 75,
                   height: 20,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadiusDirectional.circular(2),
-                      color: hijauTrans),
+                  decoration: BoxDecoration(borderRadius: BorderRadiusDirectional.circular(2), color: hijauTrans),
                   child: Center(
                     child: Text(
                       diskon,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: bgHeader),
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: bgHeader),
                     ),
                   ),
                 ),
@@ -1096,10 +935,7 @@ Widget ProdukCard(
                     Container(
                       child: Text(
                         daerah,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: abuText),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: abuText),
                       ),
                     ),
                   ],
@@ -1117,11 +953,7 @@ Widget ProdukCard(
                           size: 13,
                         )),
                     Container(
-                      child: Text('$rating | Terjual $terjual',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400,
-                              color: abuText)),
+                      child: Text('$rating | Terjual $terjual', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: abuText)),
                     ),
                   ],
                 ),
